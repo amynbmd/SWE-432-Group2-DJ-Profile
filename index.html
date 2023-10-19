@@ -4,182 +4,122 @@
     <meta charset="utf-8" />
     <title>DJ Radio</title>
     <link href="style.css" rel="stylesheet" />
+    <script type="text/javascript" src="temp-song-list.js"></script>
+    <script type="text/javascript" src="temp-song-source.js"></script>
+    <script type="text/javascript" src="temp-playlist.js"></script>
+    <script type="text/javascript" src="add-song-to-playlist-function.js"></script>
+    <script type="text/javascript" src="./form-validator.js"></script>
+    <script type="text/javascript" src="./load-playlist.js"></script>
+    <script type="text/javascript" src="./search-playlist.js"></script>
+    <script type="text/javascript" src="./search-song.js"></script>
   </head>
-
 
   <body>
     <header class="h-container header-font">
-      <div class="h-left">@GenZWave</div>
+      <div class="h-left">
+        <span class="home-page" onclick="alert('This is the Home Page of DJ Radio!')"> @GenZWave</span>
+      </div>
       <div class="h-center h-nav-container">
         <div class="h-center-item">
-          <div class="h-menu-item">Producer<br>Profile</div>
+          <div class="h-menu-item">Producer<br />Profile</div>
         </div>
         <div class="h-center-item">
-          <div class="h-menu-item">Listener<br>Profile</div>
+          <div class="h-menu-item">Listener<br />Profile</div>
         </div>
         <div class="h-center-item">
-          <div class="h-menu-item">Music<br>Events</div>
+          <div class="h-menu-item">Music<br />Events</div>
         </div>
       </div>
-      <div class="h-right">
-         My DJ Profile
-      </div>
+      <div class="h-right">My DJ Profile</div>
     </header>
-
-
-    <main class="b-container">
-      <div class="b-container-top">
-        <div class="container">
-          <div class="flex-1">
-            <div class="b-left-container">
-              <div class="filters">
-                <div>
-                  <select class="form-item shadow-box">
-                    <option value="0">Select A Time Slot To Display Playlist</option>
-                    <option value="5PM">5 PM</option>
-                    <option value="7PM">7 PM</option>
-                    <option value="9PM">9 PM</option>
-                    <option value="11PM">11 PM</option>
-                  </select>
+    <form id="edit-playlist" action="#">
+      <main class="b-container">
+        <div class="b-container-top">
+          <div class="container">
+            <div class="flex-1">
+              <div class="b-left-container">
+                <div class="filters">
+                  <div>
+                    <select id="select-time-slot" class="form-item shadow-box"></select>
+                  </div>
+                  <div>
+                    <input id="playlist-name" class="form-item shadow-box" placeholder="Current Playlist Name" type="text" />
+                    <input id="playlist-id" value="" type="hidden" />
+                    <button type="submit" class="form-item">SAVE PLAYLIST</button>
+                  </div>
                 </div>
-                <div>
-                  <input class="form-item shadow-box" placeholder="Current Playlist Name" type="text" />
-                </div>
+
+                <figure class="b-left-bottom">
+                  <img src="https://grapeejapan.com/wp-content/uploads/DJMyMelody.jpg" alt="DJ SWE-432" width="500" height="400" />
+                  <figcaption>Fig 1. DJ is playing music</figcaption>
+                </figure>
               </div>
-
-              <figure class="b-left-bottom">
-                <img src="https://img.freepik.com/premium-vector/cute-boy-playing-dj-music-cartoon-vector-icon-illustration-people-technology-icon-concept-isolated_138676-4738.jpg?w=826" alt="DJ SWE-432" width="400" height="400" />
-                <figcaption>Fig 1. DJ is playing music</figcaption>
-              </figure>
             </div>
-          </div>
-          <div class="flex-3">
-            <div class="b-right-container">
-              <form>
+
+            <div class="flex-3">
+              <div class="b-right-container">
                 <div class="filters search-playlist-song-container">
-                  <input class="form-item shadow-box" placeholder="Search previous playlists (to add to current playlist)" type="text" />
-                  <input class="form-item shadow-box search-song" placeholder="Search songs (to add to current playlist)" type="text" />
-                  <input class="form-item" type="submit" value="SAVE" />
-                </div>
-              </form>
+                  <div class="form-item dropdown">
+                    <input id="search-previous" class="form-item shadow-box" placeholder="Search previous playlists (to add to current playlist)" type="text" />
+                    <div id="playlist-dropdown" class="dropdown-content"></div>
+                  </div>
 
-              <div class="songs-container">
-                <div class="song-item">
-                  <figure class="b-left-bottom" style="margin: 0; margin-right: 10px;">
-                    <img src="https://pbs.twimg.com/media/Dq2IlnQXQAAYIOC?format=jpg&name=medium" alt="KUROMI" width="66" height="66" />
+                  <div id="search-song-container" class="form-item dropdown">
+                    <input id="search-song" class="form-item shadow-box search-song" placeholder="Search songs (to add to current playlist)" type="text" />
+                    <div id="song-dropdown" class="dropdown-content"></div>
+                  </div>
+                </div>
+
+                <!-- This element is a hidden template element to be used to copy, update with the selected song, and append to songs container playlist -->
+                <div id="hidden-template-element" style="display: none" class="song-item">
+                  <figure class="b-left-bottom" style="margin: 0; margin-right: 10px">
+                    <img src="" alt="" width="66" height="66" />
                   </figure>
-                  <div class="song-name">Song's name #1</div>
+                  <div class="song-name"></div>
                   <audio controls class="now-playing">
-                    <source src="https://samplelib.com/lib/preview/mp3/sample-3s.mp3" type="audio/mpeg">
+                    <source src="" type="audio/mpeg" />
                     Your browser does not support the audio element.
                   </audio>
                   <div class="song-toggle">
                     <label class="switch">
-                      <input type="checkbox" />
+                      <input name="song-toggle" type="checkbox" />
                       <span class="slider round"></span>
                     </label>
                   </div>
                 </div>
+                <!-- This element is a hidden template element to be used to copy, update with the selected song, and append to songs container playlist -->
 
-                <div class="song-item">
-                  <figure class="b-left-bottom" style="margin: 0; margin-right: 10px;">
-                    <img src="https://i.pinimg.com/236x/27/d1/6f/27d16f378910127c30fdb996d9858854.jpg" alt="MYMELODY" width="66" height="66" />
-                  </figure>
-                  <div class="song-name">Song's name #2</div>
-                  <audio controls class="now-playing">
-                    <source src="https://samplelib.com/lib/preview/mp3/sample-3s.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                  </audio>
-                  <div class="song-toggle">
-                    <label class="switch">
-                      <input type="checkbox" />
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-
-                <div class="song-item">
-                  <figure class="b-left-bottom" style="margin: 0; margin-right: 10px;">
-                    <img src="https://i.pinimg.com/originals/35/d2/63/35d2630fc2e633879a2d676c4eee0f24.jpg" alt="CINNAMOROLL" width="66" height="66" />
-                  </figure>
-                  <div class="song-name">Song's name #3</div>
-                  <audio controls class="now-playing">
-                    <source src="https://samplelib.com/lib/preview/mp3/sample-3s.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                  </audio>
-                  <div class="song-toggle">
-                    <label class="switch">
-                      <input type="checkbox" />
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-
-                <div class="song-item">
-                  <figure class="b-left-bottom" style="margin: 0; margin-right: 10px;">
-                    <img src="https://i.pinimg.com/originals/9e/78/06/9e780673927a4a05474c9da558a2c261.jpg" alt="POMPOMPURIN" width="66" height="66" />
-                  </figure>
-                  <div class="song-name">Song's name #4</div>
-                  <audio controls class="now-playing">
-                    <source src="https://samplelib.com/lib/preview/mp3/sample-3s.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                  </audio>
-                  <div class="song-toggle">
-                    <label class="switch">
-                      <input type="checkbox" />
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-
-                <div class="song-item">
-                  <figure class="b-left-bottom" style="margin: 0; margin-right: 10px;">
-                    <img src="https://pbs.twimg.com/media/FmxD9acWIAIS1yM?format=jpg&name=medium" alt="HELLOKITTY" width="66" height="66" />
-                  </figure>
-                  <div class="song-name">Song's name #5</div>
-                  <audio controls class="now-playing">
-                    <source src="https://samplelib.com/lib/preview/mp3/sample-3s.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                  </audio>
-                  <div class="song-toggle">
-                    <label class="switch">
-                      <input type="checkbox" />
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
+                <div id="songs-container" class="songs-container"></div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <article class="b-container-bottom">
-        <div class="upcoming-events-container">
-          <div class="upcoming-events-header header-font">Upcoming Events</div>
-          <ul class="upcoming-events-list">
-            <li class="upcoming-events-item">Event 1</li>
-            <li class="upcoming-events-item">Event 2</li>
-            <li class="upcoming-events-item">Event 3</li>
-            <li class="upcoming-events-item">Event 4</li>
-            <li class="upcoming-events-item">Event 5</li>
-            <li class="upcoming-events-item">Event 6</li>
-            <li class="upcoming-events-item">Event 7</li>
-            <li class="upcoming-events-item">Event 8</li>
-          </ul>
-        </div>
-      </article>
-    </main>
-
-
+        <article class="b-container-bottom">
+          <div class="upcoming-events-container">
+            <div class="upcoming-events-header header-font">Upcoming Events</div>
+            <ul class="upcoming-events-list">
+              <li class="upcoming-events-item">Event 1</li>
+              <li class="upcoming-events-item">Event 2</li>
+              <li class="upcoming-events-item">Event 3</li>
+              <li class="upcoming-events-item">Event 4</li>
+              <li class="upcoming-events-item">Event 5</li>
+              <li class="upcoming-events-item">Event 6</li>
+              <li class="upcoming-events-item">Event 7</li>
+              <li class="upcoming-events-item">Event 8</li>
+            </ul>
+          </div>
+        </article>
+      </main>
+    </form>
     <footer class="f-container">
       <div class="song-item">
-        <figure class="b-left-bottom" style="margin: 0; margin-right: 10px;">
+        <figure class="b-left-bottom" style="margin: 0; margin-right: 10px">
           <img src="https://static.wikia.nocookie.net/muc/images/2/2d/Kitty_%26_Her_Friends.jpeg/revision/latest/scale-to-width-down/1000?cb=20230511214809" alt="FRIENDS" width="120" height="66" />
         </figure>
         <div class="song-name">PLAYING EVENT</div>
         <audio controls class="now-playing">
-          <source src="https://samplelib.com/lib/preview/mp3/sample-3s.mp3" type="audio/mpeg">
+          <source src="https://samplelib.com/lib/preview/mp3/sample-3s.mp3" type="audio/mpeg" />
           Your browser does not support the audio element.
         </audio>
       </div>
