@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+    <%- include('../partials/dj-profile-scripts'); %>
+  </head>
+  
+  <body>
+    <header class="h-container header-font"><%- include('../partials/header'); %></header>
+
+    <main class="b-container">
+        <div class="b-container-top">
+
+          <form id="edit-playlist" action="#">
+            <div class="container">
+              <div class="flex-1">
+                <div class="b-left-container">
+                  <div class="filters">
+                    <div>
+                      <select id="select-time-slot" class="form-item shadow-box">
+                        <option value="0">Select A Time Slot To Display Playlist</option>
+                        <% currentPlaylists.forEach(function(playlist) { %>
+                          <option value="<%= playlist.timeSlot %>"><%= playlist.displayTimeSlot %></option>
+                        <% }); %>                      
+                      </select>
+                    </div>
+                    <div>
+                      <input id="playlist-name" class="form-item shadow-box" placeholder="Current Playlist Name" type="text" />
+                      <input id="playlist-id" value="" type="hidden" />
+                      <button type="submit" class="form-item">SAVE PLAYLIST</button>
+                    </div>
+                  </div>
+  
+                  <figure class="b-left-bottom">
+                    <img src="https://grapeejapan.com/wp-content/uploads/DJMyMelody.jpg" alt="DJ SWE-432" width="500" height="400" />
+                    <figcaption>Fig 1. DJ is playing music</figcaption>
+                  </figure>
+                </div>
+              </div>
+  
+              <div class="flex-3">
+                <div class="b-right-container">
+                  <div class="filters search-playlist-song-container">
+                    <div class="form-item dropdown" style="margin-top: 0;">
+                      <input id="search-previous" class="form-item shadow-box" placeholder="Search previous playlists (to add to current playlist)" type="text" />
+                      <div id="playlist-dropdown" class="dropdown-content"></div>
+                    </div>
+  
+                    <div id="search-song-container" class="form-item dropdown" style="margin-top: 0;">
+                      <input id="search-song" class="form-item shadow-box search-song" placeholder="Search songs (to add to current playlist)" type="text" />
+                      <div id="song-dropdown" class="dropdown-content"></div>
+                    </div>
+                  </div>
+  
+                  <!-- This element is a hidden template element to be used to copy, update with the selected song, and append to songs container playlist -->
+                  <div id="hidden-template-element" style="display: none" class="song-item">
+                    <figure class="b-left-bottom" style="margin: 0; margin-right: 10px">
+                      <img src="" alt="" width="66" height="66" />
+                    </figure>
+                    <div class="song-name"></div>
+                    <audio controls class="now-playing">
+                      <source src="" type="audio/mpeg" />
+                      Your browser does not support the audio element.
+                    </audio>
+                    <div class="song-toggle">
+                      <label class="switch">
+                        <input name="song-toggle" type="checkbox" />
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <!-- This element is a hidden template element to be used to copy, update with the selected song, and append to songs container playlist -->
+  
+                  <div id="songs-container" class="songs-container"></div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+        </div>
+
+        <article class="b-container-bottom">
+          <div class="upcoming-events-container">
+            <div class="upcoming-events-header header-font">Upcoming Events</div>
+            <ul class="upcoming-events-list">
+              <li class="upcoming-events-item" style="min-width: 212px; min-height: 101px;">
+                <iframe src="https://www.youtube.com/embed/XfzpYcwiUrA" title="Adele: NPR Music Tiny Desk Concert" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </li>
+              <li class="upcoming-events-item">
+                <iframe src="https://www.youtube.com/embed/uwUt1fVLb3E" title="Alicia Keys: NPR Music Tiny Desk Concert" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </li>
+              <li class="upcoming-events-item">
+                <iframe src="https://www.youtube.com/embed/bdneye4pzMw" title="Sting And Shaggy: NPR Music Tiny Desk Concert" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </li>
+              <li class="upcoming-events-item">
+                <iframe src="https://www.youtube.com/embed/j82L3pLjb_0" title="Coldplay: NPR Music Tiny Desk Concert" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </li>
+              <li class="upcoming-events-item">
+                <iframe src="https://www.youtube.com/embed/_t-nRXwAL1k" title="Paramore: NPR Music Tiny Desk Concert" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </li>
+              <li class="upcoming-events-item">
+                <iframe src="https://www.youtube.com/embed/XWIvfE01J0k" title="Edward Sharpe And The Magnetic Zeroes: NPR Music Tiny Desk Concert" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </li>
+              <li class="upcoming-events-item">
+                <iframe src="https://www.youtube.com/embed/mi6uRT7PxTQ" title="Death Cab For Cutie: NPR Music Tiny Desk Concert" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </li>
+              <li class="upcoming-events-item">
+                <iframe src="https://www.youtube.com/embed/ieoiAeL-uow" title="Dave Matthews: NPR Music Tiny Desk Concert" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </li>
+            </ul>
+          </div>
+        </article>
+    </main>
+
+    <footer class="f-container"><%- include('../partials/footer'); %></footer>
+  </body>
+</html>

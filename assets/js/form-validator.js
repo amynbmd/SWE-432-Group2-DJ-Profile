@@ -11,30 +11,33 @@ function validateForm() {
   return true;
 }
 
-
-function processForm(form) {
+async function processForm(form) {
   var playlistName = document.getElementById('playlist-name').value;
   var playlistId = document.getElementById('playlist-id').value;
-  var foundPlaylist = LIST_OF_CURRENT_PLAYLIST.find((playlist) => playlist.playlistId == playlistId);
 
   var activeSongs = [...form.querySelectorAll('input[name=song-toggle]:checked')];
   var songsId = activeSongs.map(song => {
     return Number(song.dataset.songid);
   });
 
-  var selectedSongs = LIST_OF_TEST_SONGS.filter(song => songsId.includes(song.songId));
-  foundPlaylist.songs = selectedSongs;
-  foundPlaylist.title = playlistName;
-  foundPlaylist.lastUpdate = new Date();
+  let playlist = {
+    playlistId: playlistId,
+    playlistName: playlistName, 
+    songsId: songsId
+  };
 
-  addSongsToPlaylist(foundPlaylist.songs);
+  const url = window.location.origin + '/api/current-playlists';
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(playlist)
+  });
 
-  console.log(foundPlaylist);
+  const updatedPlaylist = await response.json();
 
-  // console.log(selectedSongs);
-  // console.log(songsId);
-  // console.log(playlistId, playlistName);
-  // console.log(foundPlaylist);
+  loadPlaylist(updatedPlaylist);
 }
 
 /* This function attaches the validateForm function to the form's submit event */

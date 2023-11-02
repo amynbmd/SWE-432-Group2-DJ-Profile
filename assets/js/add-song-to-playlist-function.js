@@ -8,7 +8,7 @@
       year: '1965',
     }
    */
-function addSongToPlaylist(song) {
+async function addSongToPlaylist(song, toggleAll) {
   var songsContainer = document.getElementById('songs-container');
 
   //Clone the template element so that we can insert using the selected song properies.
@@ -20,7 +20,12 @@ function addSongToPlaylist(song) {
 
   //TO-DO: replace the image and audio source with selected song.
   //This is only to get a random element in the array.
-  var randomSongProperties = SONGS_SOURCE[Math.floor(Math.random() * SONGS_SOURCE.length)];
+
+
+  const url = window.location.origin + '/api/songs-media';
+  const response = await fetch(url);
+  const songsSources = await response.json();
+  var randomSongProperties = songsSources[Math.floor(Math.random() * songsSources.length)];
 
   templateElement.querySelector('.song-name').innerHTML = song.title + ' by ' + song.artist;
   templateElement.querySelector('img').alt = randomSongProperties.alt;
@@ -29,6 +34,11 @@ function addSongToPlaylist(song) {
   templateElement.querySelector("input[type='checkbox']").dataset.songid = song.songId;
 
   songsContainer.append(templateElement);
+
+
+  if (toggleAll) {
+    toggleAllActive()
+  }
 }
 
 
@@ -43,16 +53,13 @@ function addSongsToPlaylist(songs) {
   for (var index = 0; index < songs.length; index++) {
     addSongToPlaylist(songs[index]);
   }
-
-  toggleAllActive();
 }
 
 /**
  * Toggle all songs to active in the id='songs-container'
  */
-function toggleAllActive() {
+async function toggleAllActive() {
   var nodes = document.getElementById('songs-container').querySelectorAll("input[type='checkbox']");
-
   for (var i = 0; i < nodes.length; i++) {
     nodes[i].checked = true;
   }
