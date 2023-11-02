@@ -16,14 +16,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
   });
 
   //Everytime user type into Search songs, find songs that have the matching text.
-  searchSong.addEventListener('keyup', function () {
+  searchSong.addEventListener('keyup', async function () {
     var searchedValue = searchSong.value.trim();
 
     //If entered text is NOT empty then try to display fitlered list
     if (searchedValue !== '') {
-      //Find all matched songs.
-      var matchedSongs = LIST_OF_TEST_SONGS.filter((song) => song.title.toLowerCase().includes(searchedValue.toLowerCase()));
-
+      const url = window.location.origin + '/api/songs?title=' + searchedValue.toLowerCase();
+      const response = await fetch(url);
+      const matchedSongs = await response.json();
+      
       //Create an <a> tag for each song to display.
       var matchedSongsToDisplay = matchedSongs.map((song) => {
         return `<a data-id='${song.songId}' class='song-dropdown-item'>${song.title} by ${song.artist}</a>`;
@@ -38,10 +39,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
   });
 
   //When user clicked on the searched song, get the song id and pass it to the addSongToPlaylist() function
-  songDropDown.addEventListener('click', function (e) {
+  songDropDown.addEventListener('click', async function (e) {
     if (e.target && e.target.matches('a.song-dropdown-item')) {
-      var foundSong = LIST_OF_TEST_SONGS.find((song) => song.songId == e.target.dataset.id);
-      addSongToPlaylist(foundSong);
+      const url = window.location.origin + '/api/songs?id=' + e.target.dataset.id;
+      const response = await fetch(url);
+      const foundSong = await response.json();    
+
+      addSongToPlaylist(foundSong[0]);
     }
   });
 });

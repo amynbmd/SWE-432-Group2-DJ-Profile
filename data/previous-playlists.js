@@ -1,0 +1,168 @@
+const LIST_OF_PREVIOUS_PLAYLIST = [
+  {
+    playlistId: 5,
+    title: 'Songs that make you dance',
+    songs: [
+      {
+        songId: 230,
+        title: 'Mannish Boy',
+        artist: 'Muddy Waters',
+        album: 'The Anthology',
+        year: '1955',
+      },
+      {
+        songId: 231,
+        title: 'Moondance',
+        artist: 'Van Morrison',
+        album: 'Moondance',
+        year: '1970',
+      },
+      {
+        songId: 232,
+        title: 'Just Like a Woman',
+        artist: 'Bob Dylan',
+        album: 'Blonde on Blonde',
+        year: '1966',
+      },
+      {
+        songId: 234,
+        title: 'Only the Lonely',
+        artist: 'Roy Orbison',
+        album: 'For the Lonely: 18 Greatest Hits',
+        year: '1960',
+      },
+      {
+        songId: 235,
+        title: 'We Gotta Get Out Of This Place',
+        artist: 'The Animals',
+        album: 'Retrospective',
+        year: '1965',
+      },
+    ],
+  },
+  {
+    playlistId: 6,
+    title: 'Songs to scream your heart out',
+    songs: [
+      {
+        songId: 227,
+        title: 'Fire and Rain',
+        artist: 'James Taylor',
+        album: 'Sweet Baby James',
+        year: '1970',
+      },
+      {
+        songId: 228,
+        title: 'Should I Stay or Should I Go',
+        artist: 'The Clash',
+        album: 'Combat Rock',
+        year: '1982',
+      },
+      {
+        songId: 229,
+        title: 'Good Times',
+        artist: 'Chic',
+        album: 'Risqué',
+        year: '1979',
+      },
+    ],
+  },
+  {
+    playlistId: 7,
+    title: 'Songs to motivate you',
+    songs: [
+      {
+        songId: 341,
+        title: 'Spirit in the Sky',
+        artist: 'Norman Greenbaum',
+        album: 'Spirit in the Sky',
+        year: '1970',
+      },
+      {
+        songId: 342,
+        title: 'Sweet Jane',
+        artist: 'The Velvet Underground',
+        album: 'Loaded (Fully Loaded Edition)',
+        year: '1970',
+      },
+      {
+        songId: 343,
+        title: 'Wild Horses',
+        artist: 'The Rolling Stones',
+        album: 'Sticky Fingers',
+        year: '1971',
+      },
+      {
+        songId: 344,
+        title: 'Beat It',
+        artist: 'Michael Jackson',
+        album: 'Thriller',
+        year: '1982',
+      },
+      {
+        songId: 345,
+        title: 'Beautiful Day',
+        artist: 'U2',
+        album: "All That You Can't Leave Behind",
+        year: '2000',
+      },
+      {
+        songId: 346,
+        title: 'Walk This Way',
+        artist: 'Aerosmith',
+        album: 'Toys in the Attic',
+        year: '1975',
+      },
+      {
+        songId: 347,
+        title: "Maybe I'm Amazed",
+        artist: 'Paul McCartney',
+        album: 'McCartney',
+        year: '1970',
+      },
+    ],
+  },
+  {
+    playlistId: 8,
+    title: 'Songs that make you cry',
+    songs: [
+      {
+        songId: 353,
+        title: 'Piece of My Heart',
+        artist: 'Big Brother & The Holding Company',
+        album: 'Cheap Thrills',
+        year: '1968',
+      },
+      {
+        songId: 354,
+        title: 'La Bamba',
+        artist: 'Ritchie Valens',
+        album: 'The Ritchie Valens Story',
+        year: '1958',
+      },
+      {
+        songId: 355,
+        title: 'California Love (remix) (feat. Dr. Dre & Roger Troutman)',
+        artist: '2Pac',
+        album: 'Greatest Hits',
+        year: '1996',
+      },
+      {
+        songId: 356,
+        title: 'Candle in the Wind',
+        artist: 'Elton John',
+        album: 'Goodbye Yellow Brick Road',
+        year: '1973',
+      },
+      {
+        songId: 357,
+        title: 'That Lady (Parts 1 & 2)',
+        artist: 'The Isley Brothers',
+        album: 'The Essential Isley Brothers',
+        year: '1973',
+      },
+    ],
+  },
+];
+
+exports.playlists = LIST_OF_PREVIOUS_PLAYLIST;
