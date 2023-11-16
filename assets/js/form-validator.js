@@ -14,6 +14,8 @@ function validateForm() {
 async function processForm(form) {
   var playlistName = document.getElementById('playlist-name').value;
   var playlistId = document.getElementById('playlist-id').value;
+  var selectedTimeSlot = document.getElementById('select-time-slot');
+  var selectedValue = selectedTimeSlot.options[selectedTimeSlot.selectedIndex].value;
 
   var activeSongs = [...form.querySelectorAll('input[name=song-toggle]:checked')];
   var songsId = activeSongs.map(song => {
@@ -23,6 +25,7 @@ async function processForm(form) {
   let playlist = {
     playlistId: playlistId,
     playlistName: playlistName, 
+    timeSlot: selectedValue,
     songsId: songsId
   };
 

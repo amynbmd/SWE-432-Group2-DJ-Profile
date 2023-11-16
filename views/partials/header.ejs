@@ -11,8 +11,21 @@
   <div class="h-center-item">
     <div class="h-menu-item"  onclick="location.href='./dj-profile';">DJ<br />Profile</div>
   </div>
-  <!-- <div class="h-center-item">
-    <div class="h-menu-item">Music<br />Events</div>
-  </div> -->
 </div>
-<div class="h-right"><%= currentProfile %></div>
+<div class="h-right">
+  <div class="user-profile" id="user-profile">
+    <span class="btn-open"><%= currentProfile %></span>
+  </div>
+</div>
+
+<section class="modal hidden">
+  <div class="modal-content">
+    <div class="model-item current-profile" style="text-align: center;"><%= currentProfile %></div>
+    <div class="model-item" style="text-align: center;">
+      <button class="modal-button button1 btn-logout">Logout</button>
+      <button class="modal-button button2 btn-close">Close</button>
+    </div>
+  </div>
+</section>
+
+<div class="overlay hidden"></div>

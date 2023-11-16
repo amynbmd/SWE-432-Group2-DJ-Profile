@@ -35,7 +35,6 @@ async function addSongToPlaylist(song, toggleAll) {
 
   songsContainer.append(templateElement);
 
-
   if (toggleAll) {
     toggleAllActive()
   }
@@ -64,3 +63,124 @@ async function toggleAllActive() {
     nodes[i].checked = true;
   }
 }
+
+async function removeNoPlaylist() {
+  if (document.getElementById('no-playlist')) {
+    document.getElementById('no-playlist').remove();
+  }
+}
+
+async function initPage() {
+  const selectTimeSlot = sessionStorage.getItem("select-time-slot");
+
+  if (selectTimeSlot) {
+    const selectElement = document.getElementById('select-time-slot'); 
+    for (let i = 0; i < selectElement.options.length; i++) {
+      if (selectElement.options[i].value === selectTimeSlot) {
+        selectElement.selectedIndex = i;
+        break;
+      }
+    }
+
+    await getAndLoadPlaylist(selectTimeSlot);
+
+  } else {
+    disableFormWhenNoTimeSlotSelected();
+  } 
+}
+
+function disableFormWhenNoTimeSlotSelected() {
+  var selectedTimeSlot = document.getElementById('select-time-slot');
+  var selectedValue = selectedTimeSlot.options[selectedTimeSlot.selectedIndex].value;
+
+  var playlistName = document.getElementById('playlist-name');
+  var submitButton = document.getElementById('submit-button');
+  var searchPrevious = document.getElementById('search-previous');
+  var searchSong = document.getElementById('search-song');
+
+  if (selectedValue == 0 || selectedValue == '0') {
+    playlistName.disabled = true;
+    submitButton.disabled = true;
+    searchPrevious.disabled = true;
+    searchSong.disabled = true;
+
+  } else {
+    playlistName.disabled = false;
+    submitButton.disabled = false;
+    searchPrevious.disabled = false;
+    searchSong.disabled = false;
+  }
+}
+
+
+// window.addEventListener('DOMContentLoaded', (event) => {
+//   var playlistName = document.getElementById('playlist-name');
+//   playlistName.addEventListener('change', async function (event) {
+//     savePlaylistNameToSession(playlistName.value);
+//   });
+// })
+
+
+/**************************************BEGIN: sessionStorage**************************************/
+function savePlaylistToSession(playlist) {
+  sessionStorage.setItem("playlistId", playlist.playlistId);
+  sessionStorage.setItem("songs", JSON.stringify(playlist.songs.map(song => {
+    return {...song, active: 1}
+  })));
+}
+
+function saveSelectedTimeSlotToSession(selectedValue) {
+  sessionStorage.setItem("select-time-slot", selectedValue);
+}
+
+function savePlaylistNameToSession(playlistName) {
+  sessionStorage.setItem("title", playlistName.trim());
+}
+
+function addSongToSessionPlaylist(song) {
+  let songs = JSON.parse(sessionStorage.getItem("songs"));
+
+  sessionStorage.setItem("songs", JSON.stringify([...songs, {...song, active: 0}]));
+}
+/**************************************End: sessionStorage**************************************/
+
+
+
+window.addEventListener('DOMContentLoaded', (event) => {
+  var userProfile = document.getElementById('user-profile');
+  const openModalBtn = document.querySelector(".btn-open");
+  const closeModalBtn = document.querySelector(".btn-close");
+  const logoutModalBtn = document.querySelector(".btn-logout");
+
+  userProfile.addEventListener('click', async function (event) {
+    console.log('user-profile');
+
+  });
+
+  openModalBtn.addEventListener("click", openModal);
+  closeModalBtn.addEventListener("click", closeModal);
+  logoutModalBtn.addEventListener("click", logout);
+});
+
+function openModal() {
+  const modal = document.querySelector(".modal");
+  const overlay = document.querySelector(".overlay");
+
+  modal.classList.remove("hidden");
+  overlay.classList.remove("hidden");
+};
+
+function closeModal() {
+  const modal = document.querySelector(".modal");
+  const overlay = document.querySelector(".overlay");
+
+  modal.classList.add("hidden");
+  overlay.classList.add("hidden");
+};
+
+
+function logout() {
+  closeModal();
+  sessionStorage.clear();
+  window.location = '/';   
+};

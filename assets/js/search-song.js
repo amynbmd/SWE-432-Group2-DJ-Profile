@@ -43,8 +43,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     if (e.target && e.target.matches('a.song-dropdown-item')) {
       const url = window.location.origin + '/api/songs?id=' + e.target.dataset.id;
       const response = await fetch(url);
-      const foundSong = await response.json();    
-
+      const foundSong = await response.json();
+      await removeNoPlaylist();
       addSongToPlaylist(foundSong[0]);
     }
   });

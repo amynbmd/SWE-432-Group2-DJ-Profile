@@ -5,7 +5,7 @@
     include('../partials/dj-profile-scripts'); %>
   </head>
 
-  <body>
+  <body onload="initPage();">
     <header class="h-container header-font">
       <%- include('../partials/header'); %>
     </header>
@@ -37,7 +37,7 @@
                       type="text"
                     />
                     <input id="playlist-id" value="" type="hidden" />
-                    <button type="submit" class="form-item">
+                    <button id="submit-button" type="submit" class="form-item">
                       SAVE PLAYLIST
                     </button>
                   </div>
