@@ -36,8 +36,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
   });
 
-  playlistDropDown.addEventListener('click', function (e) {
+  playlistDropDown.addEventListener('click', async function (e) {
     if (e.target && e.target.matches('a.playlist-dropdown-item')) {
+      await removeNoPlaylist();
       addSongsFromPlaylist(e.target.dataset.id);
     }
   });
