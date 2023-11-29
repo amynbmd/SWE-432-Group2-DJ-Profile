@@ -12,6 +12,8 @@ var playlistSchema = new Schema({
         album: String,
         year: String,
     }],
+    prefData: {},
+    dj: String
 });
 
 module.exports = mongoose.model('playlists', playlistSchema); 

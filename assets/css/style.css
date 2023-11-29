@@ -379,7 +379,7 @@ ul.upcoming-events-list {
 
 .user-profile {
   float: right;
-  width: 150px;
+  width: 175px;
   text-align: center;
 }
 .user-profile:hover {
@@ -412,7 +412,7 @@ ul.upcoming-events-list {
   position: absolute;
   top: 30%;
   left: 45%;
-  width: 250px;
+  width: 350px;
   height: 250px;
   background-color: white;
 }
@@ -445,4 +445,85 @@ ul.upcoming-events-list {
 
 .hidden {
   display: none;
+}
+
+
+
+
+/********************************* Listener *********************************/
+.prefBox {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  background-color: #F0F0F0;
+  border-radius: 30px;
+  padding: 10%;
+  font-size: large;
+  font-weight: 400;
+  align-items: center;
+}
+
+input.username-input {
+  border-radius: 30px;
+  padding: 10px;
+  font-size: large;
+  border-style: none;
+  background-color: #ffffff;
+  font-weight: 700;
+  margin: 5px;
+}
+
+button.username-btn {
+  background-color: #ef99be;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 900;
+  transition-duration: 0.4s;
+  margin: 10px;
+}
+
+button.username-btn:hover {
+  background-color: #213555;
+  color: white;
+}
+/********************************* Listener *********************************/
+
+.row{
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+}
+
+.right{
+  text-align: center;
+  -ms-flex:70%;
+  flex:70%;
+  padding:20px;
+  margin-left: 100px;
+  margin-top: 20px;
+}
+.left{
+  text-align: center;
+  -ms-flex: 30%;
+  flex:30%;
+  padding: 20px;
+  margin-left: 20px;
+}
+
+.list{
+  font-family: 'Courier New', Courier, monospace;
+  align-items: center;
+  justify-content: center;
+  display: block;
+  margin-top: 30px;
 }

@@ -1,6 +1,9 @@
 var express = require("express");
+const session = require("express-session");
 var app = express();
+
 const mongoose = require("mongoose");
+const { MongoClient, ServerApiVersion } = require("mongodb");
 
 //get seed data
 var songs = require("./data/list-of-songs");
@@ -11,8 +14,37 @@ var Song = require("./data/song-model.js");
 var Playlist = require("./data/playlist-model.js");
 var Media = require("./data/media-model.js");
 
+var Schema = mongoose.Schema;
+
+/*
+  "name": "DJ Unusual Eustacia (A.K.A Lil. Duyen)",
+  "timeslot": "evening",
+  "genre": "pop",
+  "emotion": "hype",
+  "rhythm": "fast"
+*/
+var DJSchema = new Schema({
+  name: String,
+  timeslot: String,
+  genre: String,
+  emotion: String,
+  rhythm: String,
+});
+
+var DJ = mongoose.model("djs", DJSchema);
+
+const genDB = require("./assets/js/genDB");
+const { genDj, genSong, genPlaylist } = genDB;
+
 const databaseName = "genzwave";
 const connectionString = "mongodb://localhost:27017/" + databaseName;
+const client = new MongoClient(connectionString);
+
+const prefs = {
+  genre: ["rap", "pop", "rb"],
+  emotion: ["hype", "sad", "romance"],
+  rhythm: ["slow", "fast"],
+};
 
 // set the view engine to ejs
 app.set("view engine", "ejs");
@@ -23,14 +55,22 @@ app.use("/assets", express.static("./assets/"));
 // enable express to pull json data from http body.
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(
+  session({
+    secret: "keysecret",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 /****************************************BEGIN: MongoDB**************************************/
 /**
- * The following three functions are for database migration.
+ *
  */
 async function initDb() {
   await mongoose.connect(connectionString);
   await addSongsToDb();
+  await runDB();
 }
 
 /**
@@ -93,6 +133,7 @@ async function getPlaylists() {
       timeSlot: playlist.timeSlot,
       displayTimeSlot: playlist.displayTimeSlot,
       songs: [...playlist.songs],
+      dj: playlist.dj,
     };
   });
 
@@ -120,6 +161,181 @@ async function getMedia() {
   return media;
 }
 
+async function runDB() {
+  try {
+    await client.connect();
+    console.log("connected");
+
+    const list = await getListOfCollections();
+    const djs = list.find((item) => item.name === "djs");
+    const playlists = list.find((item) => item.name === "playlists");
+
+    const dj_list = await getDjs();
+
+    if (djs == undefined || djs == null || dj_list.length == 0) {
+      const db = client.db(databaseName);
+      // script for entering sample data in db
+      const djInsertResult = await db
+        .collection("djs")
+        .insertMany(Array.from({ length: 60 }, genDj));
+      const djIds = djInsertResult.insertedIds;
+    }
+
+    if (playlists == undefined || playlists == null) {
+      const djIdArray = Object.values(djIds); // Extract the values from the object
+      await Promise.all(
+        djIdArray.map((djId) =>
+          genPlaylist(djId, db).then((playlist) =>
+            db.collection("playlists").insertOne(playlist)
+          )
+        )
+      );
+    }
+
+    console.log("done");
+  } catch (e) {
+    console.log(e);
+  }
+}
+// runDB();
+
+/**
+ * Find and return all playlists in database.
+ * @returns Array of playlists
+ */
+async function getDjs() {
+  await client.connect();
+  const db = client.db(databaseName);
+
+  const djs = (await DJ.find()).map((dj) => {
+    return {
+      id: dj._id.toString(),
+      name: dj.name,
+      timeslot: dj.timeslot,
+      genre: dj.genre,
+      emotion: dj.emotion,
+      rhythm: dj.rhythm,
+    };
+  });
+
+  return djs;
+}
+
+async function getDJData(prefData) {
+  try {
+    await client.connect();
+    console.log("connected to db");
+    const db = client.db(databaseName);
+    // console.log(prefData)
+    const query = { $and: [] };
+    for (const categ in prefData) {
+      // console.log({$or: prefData[categ]})
+      const filter = { [categ]: { $in: prefData[categ] } };
+      query["$and"].push(filter);
+    }
+    // console.log(query);
+    const filteredDjs = db.collection("djs").find(query);
+    // console.log(filteredDjs)
+    const djData = [];
+    for await (const dj of filteredDjs) {
+      console.log(dj._id);
+      console.log(dj._id.toString());
+      console.log(dj);
+
+      const playlists = await getPlaylists();
+      const playlistObj = playlists.filter(
+        (playlist) => playlist.dj == dj._id.toString()
+      )[0];
+
+      if (playlistObj) {
+        // const songs = playlistObj.songs;
+        // // console.log(songs);
+        // const songNames = []
+        // for (const ind in songs){
+        //     songNames.push(ind.title);
+        // }
+
+        djData.push({ name: dj.name, playlist: playlistObj.title });
+      }
+    }
+    console.log(djData.length);
+
+    console.log("got dj data from db");
+
+    return djData;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+async function getUserData(name) {
+  try {
+    await client.connect();
+    console.log("connected to db");
+    const db = client.db(databaseName);
+
+    const user = db.collection("users").find({ name: name });
+    if (await user.hasNext()) {
+      console.log("found user data");
+      return user.next();
+    }
+    console.log("couldn't find user data");
+    return false;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+async function initUserData(name) {
+  try {
+    await client.connect();
+    console.log("connected to db");
+    const db = client.db(databaseName);
+
+    const insertResult = db.collection("users").insertOne({
+      name: name,
+      prefData: "",
+      lastPlayedDj: "",
+    });
+    console.log("created db user data");
+    return await insertResult;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+async function updatePrefData(name, prefData) {
+  try {
+    await client.connect();
+    console.log("connected to db");
+    const db = client.db(databaseName);
+
+    const res = await db
+      .collection("users")
+      .updateOne({ name: name }, { $set: { prefData: prefData } });
+    // console.log(res);
+    console.log("updated db pref data");
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+async function updateListeningData(name, lastPlayedDj) {
+  try {
+    await client.connect();
+    console.log("connected to db");
+    const db = client.db(databaseName);
+
+    const res = await db
+      .collection("users")
+      .updateOne({ name: name }, { $set: { lastPlayedDj: lastPlayedDj } });
+    // console.log(res);
+    console.log("updated db lastplayeddj data");
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 initDb();
 /****************************************END: MongoDB**************************************/
 
@@ -131,6 +347,7 @@ app.get("/", function (req, res) {
   });
 });
 
+////////////////////////////////////////DJ////////////////////////////////////////
 // render dj profile page
 app.get("/dj-profile", function (req, res) {
   const timeSlots = [
@@ -165,12 +382,6 @@ app.get("/producer-profile", function (req, res) {
   });
 });
 
-// render listener profile page
-app.get("/listener-profile", function (req, res) {
-  res.render("pages/listener-profile", {
-    currentProfile: "My Listener Profile",
-  });
-});
 /****************************************END: Render**************************************/
 
 /****************************************BEGIN: api**************************************/
@@ -249,6 +460,9 @@ app.post("/api/current-playlists", async function (req, res) {
 
     //add new playlist
   } else {
+    const djs = await getDjs();
+    const dj = djs[Math.floor(Math.random() * djs.length)];
+
     var nextId = Number(
       Math.max.apply(
         Math,
@@ -268,6 +482,7 @@ app.post("/api/current-playlists", async function (req, res) {
       title: req.body.playlistName,
       timeSlot: req.body.timeSlot,
       songs: [...selectedSongs],
+      dj: dj.id.toString(),
     });
 
     await newPlaylist.save();
@@ -280,6 +495,68 @@ app.post("/api/current-playlists", async function (req, res) {
 app.get("/api/songs-media", async function (req, res) {
   res.json(await getMedia());
 });
+////////////////////////////////////////DJ////////////////////////////////////////
+
+////////////////////////////////////////listener////////////////////////////////////////
+
+// render listener profile page
+app.get("/listener-profile", function (req, res) {
+  res.render("pages/key.ejs", {
+    username: "",
+    currentProfile: "My Listener Profile",
+  });
+});
+
+app.post("/key", async (req, res) => {
+  const username = req.body.username;
+  const data = await getUserData(username);
+  req.session.username = username;
+  if (data) {
+    // console.log(data)
+    if (!data.prefData) {
+      res.redirect("/pref");
+      return;
+    }
+    res.redirect("/player");
+    return;
+  }
+  const insertRes = await initUserData(username);
+  req.session.userId = "" + insertRes.insertedId;
+  res.redirect("/pref");
+});
+
+app.get("/pref", (req, res) => {
+  const username = req.session.username;
+  res.render("pages/prefs.ejs", {
+    username: username,
+    currentProfile: "My Listener Profile",
+  });
+});
+
+app.post("/pref/record/:prefData", async (req, res) => {
+  const prefData = req.params.prefData;
+  // console.log("pref data in /pref/rec0rd", prefData)
+  const parsedData = JSON.parse(prefData);
+  await updatePrefData(req.session.username, parsedData);
+});
+
+app.get("/player", async (req, res) => {
+  const userData = await getUserData(req.session.username);
+  const prefData = userData.prefData;
+  const lastPlayedDj = userData.lastPlayedDj;
+  // console.log('on player get')
+  console.log("in /player", lastPlayedDj);
+  // const parsedData = JSON.parse(prefData);
+  const djData = await getDJData(prefData);
+
+  res.render("pages/player.ejs", {
+    djData: djData,
+    lastPlayedDj: lastPlayedDj,
+    username: req.session.username,
+    currentProfile: "My Listener Profile",
+  });
+});
+////////////////////////////////////////listener////////////////////////////////////////
 /****************************************END: api**************************************/
 
 app.listen(8080);

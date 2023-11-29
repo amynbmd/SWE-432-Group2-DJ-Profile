@@ -75,14 +75,17 @@ async function initPage() {
 
   if (selectTimeSlot) {
     const selectElement = document.getElementById('select-time-slot'); 
-    for (let i = 0; i < selectElement.options.length; i++) {
-      if (selectElement.options[i].value === selectTimeSlot) {
-        selectElement.selectedIndex = i;
-        break;
+    if (selectElement) {
+      for (let i = 0; i < selectElement.options.length; i++) {
+        if (selectElement.options[i].value === selectTimeSlot) {
+          selectElement.selectedIndex = i;
+          break;
+        }
       }
+  
+      await getAndLoadPlaylist(selectTimeSlot);
     }
 
-    await getAndLoadPlaylist(selectTimeSlot);
 
   } else {
     disableFormWhenNoTimeSlotSelected();

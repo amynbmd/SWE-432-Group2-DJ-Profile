@@ -26,11 +26,12 @@ async function clearCurrentPlaylist() {
 
 window.addEventListener('DOMContentLoaded', (event) => {
   var selectedTimeSlot = document.getElementById('select-time-slot');
-
-  selectedTimeSlot.addEventListener('change', async function (event) {
-    var selectedValue = selectedTimeSlot.options[selectedTimeSlot.selectedIndex].value;
-    await getAndLoadPlaylist(selectedValue);
-  });
+  if (selectedTimeSlot) {
+    selectedTimeSlot.addEventListener('change', async function (event) {
+      var selectedValue = selectedTimeSlot.options[selectedTimeSlot.selectedIndex].value;
+      await getAndLoadPlaylist(selectedValue);
+    });
+  }
 });
 
 

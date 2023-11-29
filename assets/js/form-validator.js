@@ -46,16 +46,18 @@ async function processForm(form) {
 /* This function attaches the validateForm function to the form's submit event */
 window.addEventListener("DOMContentLoaded", (event) => {
   var form = document.getElementById("edit-playlist");
-  form.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    if (!validateForm()) {
-      event.preventDefault(); // Prevent form submission if validation fails.
-    } else {
-      processForm(form);
-    }
-
-    
-    return false;
-  });
+  if (form) {
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+  
+      if (!validateForm()) {
+        event.preventDefault(); // Prevent form submission if validation fails.
+      } else {
+        processForm(form);
+      }
+  
+      
+      return false;
+    });
+  }
 });

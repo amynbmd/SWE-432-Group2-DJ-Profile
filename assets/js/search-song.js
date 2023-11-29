@@ -1,7 +1,8 @@
 window.addEventListener('DOMContentLoaded', (event) => {
   var searchSong = document.getElementById('search-song');
   var songDropDown = document.getElementById('song-dropdown');
-
+  
+  if (searchSong && songDropDown) {
   //Display the list of searched song when user click IN the Search songs input box.
   searchSong.addEventListener('focus', function (event) {
     songDropDown.style.display = 'block';
@@ -48,4 +49,5 @@ window.addEventListener('DOMContentLoaded', (event) => {
       addSongToPlaylist(foundSong[0]);
     }
   });
+  }
 });
