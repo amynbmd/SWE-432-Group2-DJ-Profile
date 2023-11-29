@@ -434,6 +434,7 @@ ul.upcoming-events-list {
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .btn-logout {background-color: #f44336;} /* Blue */

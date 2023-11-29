@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- include('../partials/head'); %> <%- include('../partials/dj-profile-scripts'); %>
+    <%- include('../partials/head'); %> <%-
+    include('../partials/dj-profile-scripts'); %>
 
     <style>
       table {
@@ -32,19 +33,42 @@
   </head>
 
   <body>
-    <header class="h-container header-font"><%- include('../partials/header'); %></header>
+    <header class="h-container header-font">
+      <%- include('../partials/header'); %>
+    </header>
 
     <main class="b-container">
-      <div style="font-weight: 700; font-size: 30px; color: black; margin-top: 30px; margin-left: 30px">
+      <div
+        style="
+          font-weight: 700;
+          font-size: 30px;
+          color: black;
+          margin-top: 30px;
+          margin-left: 30px;
+        "
+      >
         <div>
           Here's what we found based on your preferences...
           <a style="text-decoration: none; color: white" href="/pref">
-            <button class="username-btn" style="text-wrap: nowrap; margin-top: 20px">Change Preferences</button>
+            <button
+              class="username-btn"
+              style="
+                text-wrap: nowrap;
+                margin-top: 20px;
+                font-family: 'Courier New', Courier, monospace;
+              "
+            >
+              Edit Preferences
+            </button>
           </a>
         </div>
 
+        <div style="color: white; font-size: xxx-large">
+          HERE IS YOUR PLAYLISTS
+        </div>
+
         <div style="max-height: 690px; overflow-y: scroll">
-          <table>
+          <table style="font-family: 'Courier New', Courier, monospace">
             <tr>
               <th>DJ Name</th>
               <th>Playlist Name</th>
