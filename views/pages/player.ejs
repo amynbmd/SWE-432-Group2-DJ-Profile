@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %> <%- include('../partials/dj-profile-scripts'); %>
+
+    <style>
+      table {
+        font-family: arial, sans-serif;
+        font-size: medium;
+        font-weight: normal;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+
+      th {
+        position: sticky;
+        top: -1px; /* 0px if you don't have a navbar, but something is required */
+        background: #ef99be;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="h-container header-font"><%- include('../partials/header'); %></header>
+
+    <main class="b-container">
+      <div style="font-weight: 700; font-size: 30px; color: black; margin-top: 30px; margin-left: 30px">
+        <div>
+          Here's what we found based on your preferences...
+          <a style="text-decoration: none; color: white" href="/pref">
+            <button class="username-btn" style="text-wrap: nowrap; margin-top: 20px; font-family: 'Courier New', Courier, monospace">Edit Preferences</button>
+          </a>
+        </div>
+
+        <div style="max-height: 690px; overflow-y: scroll; padding-top: 30px;">
+          <table style="font-family: 'Courier New', Courier, monospace">
+            <tr>
+              <th>DJ Name</th>
+              <th>Playlist Name</th>
+            </tr>
+            <% for(item of djData) { %>
+            <tr>
+              <td><%= item.name %></td>
+              <td class="listener-select-playlist" onclick="getAndLoadPlaylistForListener('<%= item.timeSlot %>')"><%= item.playlist %> - <%= item.timeSlot %></td>
+            </tr>
+            <% } %>
+          </table>
+        </div>
+
+        <!-- This element is a hidden template element to be used to copy, update with the selected song, and append to songs container playlist -->
+        <div id="hidden-template-element" style="display: none" class="song-item">
+          <figure class="b-left-bottom" style="margin: 0; margin-right: 10px">
+            <img src="" alt="" width="66" height="66" />
+          </figure>
+          <div class="song-name"></div>
+          <audio controls class="now-playing">
+            <source src="" type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+          <div style="display: none" class="song-toggle">
+            <label class="switch">
+              <input name="song-toggle" type="checkbox" />
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+        <!-- This element is a hidden template element to be used to copy, update with the selected song, and append to songs container playlist -->
+
+        
+
+        <div style="max-height: 690px; padding-top: 30px;">
+          <table style="font-family: 'Courier New', Courier, monospace">
+            <tr>
+              <th>Songs from selected playlist</th>
+            </tr>
+            <tr style="background-color: white;">
+              <td>
+                <div id="songs-container" class="songs-container" style="padding-top: 10px; font-size: medium;"></div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="f-container"><%- include('../partials/footer'); %></footer>
+  </body>
+</html>
